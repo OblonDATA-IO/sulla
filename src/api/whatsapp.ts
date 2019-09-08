@@ -13,6 +13,7 @@ declare module WAPI {
   const getAllChats: () => Chat[];
   const getAllChatsWithNewMsg: () => Chat[];
   const getAllGroups: () => Chat[];
+  const getMessageById: (messageId: string) => Message;
   const getGroupParticipantIDs: (groupId: string) => Id[];
   const getContact: (contactId: string) => Contact;
   const sendContact: (to: string, contact: string | string[]) => any;
@@ -51,7 +52,7 @@ export class Whatsapp {
   /**
    * Sends contact card to given chat id
    * @param {string} to 'xxxx@c.us'
-   * @param {string|array} contact 'xxxx@c.us' | ['xxxx@c.us', 'yyyy@c.us', ...]
+   * @param {string|array} contactId 'xxxx@c.us' | ['xxxx@c.us', 'yyyy@c.us', ...]
    */
   public async sendContact(to: string, contactId: string | string[]) {
     return await this.page.evaluate(
@@ -127,6 +128,17 @@ export class Whatsapp {
     return await this.page.evaluate(
       contactId => WAPI.getContact(contactId),
       contactId
+    );
+  }
+
+  /**
+   * Retrieves message of a given message id
+   * @param messageId Message id
+   */
+  public async getMessageById(messageId: string) {
+    return await this.page.evaluate(
+      messageId => WAPI.getMessageById(messageId),
+      messageId
     );
   }
 }
