@@ -167,10 +167,9 @@ export class Whatsapp {
           * Get all earlier messages in a chat by a given chat id
           * @param chatId chat id
           */
-
          public async getAllEarlierMessagesInChat(chatId: string) {
            return new Promise(async resolve => {
-             this.page.evaluate(chatId => {
+             await this.page.evaluate(chatId => {
                WAPI.loadAllEarlierMessages(chatId, () => {
                  resolve();
                });
