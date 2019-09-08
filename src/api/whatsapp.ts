@@ -18,7 +18,7 @@ declare module WAPI {
   const getGroupParticipantIDs: (groupId: string) => Id[];
   const getContact: (contactId: string) => Contact;
   const sendContact: (to: string, contact: string | string[]) => any;
-  const loadAllEarlierMessages: (chatId: string) => void;
+  const loadAllEarlierMessages: (chatId: string, callback: Function) => void;
   const getAllMessagesInChat: (chatId: string) => Message[];
 }
 
@@ -165,7 +165,13 @@ export class Whatsapp {
    */
   public async getAllEarlierMessagesInChat(chatId: string) {
     return await this.page.evaluate(
-      chatId => WAPI.loadAllEarlierMessages(chatId),
+      async chatId => {
+        await new Promise(
+          (resolve) => {
+            WAPI.loadAllEarlierMessages(chatId, resolve);
+          }
+        );
+      },
       chatId
     );
   }
