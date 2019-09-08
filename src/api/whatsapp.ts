@@ -164,13 +164,23 @@ export class Whatsapp {
   /**
    * Get all earlier messages in a chat by a given chat id
    * @param chatId chat id
-   * @param callback callback function
    */
-  public async getAllEarlierMessagesInChat(chatId: string, callback: Function) {
-    return await this.page.evaluate(
-      chatId => WAPI.loadAllEarlierMessages(chatId, callback),
-      chatId
-    );
+  public async getAllEarlierMessagesInChat(chatId: string) {
+    return new Promise(
+      async (resolve) => {
+        this.page.evaluate(
+          chatId => {
+            WAPI.loadAllEarlierMessages(
+              chatId,
+              () => {
+                resolve();
+              }
+            );
+          },
+          chatId
+        );
+      }
+    )
   }
 
   /**
