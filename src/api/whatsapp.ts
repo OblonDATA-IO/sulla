@@ -19,6 +19,8 @@ declare module WAPI {
   const getContact: (contactId: string) => Contact;
   const sendContact: (to: string, contact: string | string[]) => any;
   const loadAllEarlierMessages: (chatId: string, callback: Function) => void;
+  const loadEarlierMessages: (chatId: string, callback: Function) => void;
+  const areAllMessagesLoaded: (chatId: string) => boolean;
   const getAllMessagesInChat: (chatId: string) => Message[];
 }
 
@@ -162,19 +164,43 @@ export class Whatsapp {
   }
 
   /**
+   * Check if all messages in a chat have been loaded
+   * @param chatId Chat id
+   */
+  public async areAllMessagesLoaded(chatId: string) {
+    return await this.page.evaluateHandle(
+      chatId => WAPI.areAllMessagesLoaded(chatId),
+      chatId
+    );
+  }
+
+  /**
+   * Get earlier messages in a chat by a given chat id
+   * @param chatId chat id
+   */
+  public async loadEarlierMessagesInChat(chatId: string) {
+    return await this.page.evaluateHandle(chatId => {
+      return new Promise(resolve => {
+        WAPI.loadEarlierMessages(chatId, () => {
+          resolve();
+        });
+      });
+    }, chatId);
+  }
+
+  /**
    * Get all earlier messages in a chat by a given chat id
    * @param chatId chat id
    */
-  public async getAllEarlierMessagesInChat(chatId: string) {
+  public async loadAllEarlierMessagesInChat(chatId: string) {
     return await this.page.evaluateHandle(chatId => {
-      return new Promise(
-        (resolve) => {
-          WAPI.loadAllEarlierMessages(chatId, () => {
-            resolve();
-          });
-        }
-      );
+      return new Promise(resolve => {
+        WAPI.loadAllEarlierMessages(chatId, () => {
+          resolve();
+        });
+      });
     }, chatId);
+
   }
 
   /**
@@ -188,4 +214,6 @@ export class Whatsapp {
     );
   }
 }
+
+
 

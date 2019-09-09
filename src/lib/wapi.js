@@ -421,7 +421,7 @@ window.WAPI.loadEarlierMessages = function (id, done) {
  */
 window.WAPI.loadAllEarlierMessages = function (id, done) {
     const found = WAPI.getChat(id);
-    x = function () {
+    const x = function () {
         if (!found.msgs.msgLoadState.noEarlierMsgs) {
             found.loadEarlierMsgs().then(x);
         } else if (done) {
@@ -457,7 +457,7 @@ window.WAPI.areAllMessagesLoaded = function (id, done) {
 
 window.WAPI.loadEarlierMessagesTillDate = function (id, lastMessage, done) {
     const found = WAPI.getChat(id);
-    x = function () {
+    const x = function () {
         if (found.msgs.models[0].t > lastMessage) {
             found.loadEarlierMsgs().then(x);
         } else {
