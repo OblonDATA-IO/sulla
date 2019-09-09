@@ -283,11 +283,11 @@ window.WAPI.getAllGroups = function (done) {
  * @returns {T|*} Chat object
  */
 window.WAPI.getChat = function (id, done) {
-    id = typeof id == "string" ? id : id._serialized;
+    id = typeof id === "string" ? id : id._serialized;
     const found = window.Store.Chat.get(id);
     if (done !== undefined) done(found);
     return found;
-}
+};
 
 window.WAPI.getChatByName = function (name, done) {
     const found = window.Store.Chat.find((chat) => chat.name === name);

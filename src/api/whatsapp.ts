@@ -168,7 +168,7 @@ export class Whatsapp {
    * @param chatId Chat id
    */
   public async areAllMessagesLoaded(chatId: string) {
-    return await this.page.evaluateHandle(
+    return await this.page.evaluate(
       chatId => WAPI.areAllMessagesLoaded(chatId),
       chatId
     );
