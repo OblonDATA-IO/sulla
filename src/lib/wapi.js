@@ -940,18 +940,18 @@ window.WAPI.downloadFileWithCredentials = function (url, done) {
     let xhr = new XMLHttpRequest();
 
     xhr.onload = function () {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
                 let reader = new FileReader();
                 reader.readAsDataURL(xhr.response);
                 reader.onload = function (e) {
-                    done(reader.result.substr(reader.result.indexOf(',') + 1))
+                    done(reader.result);
                 };
             } else {
                 console.error(xhr.statusText);
             }
         } else {
-            console.log(err);
+            console.error(err);
             done(false);
         }
     };

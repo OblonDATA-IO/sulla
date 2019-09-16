@@ -22,6 +22,8 @@ declare module WAPI {
   const loadEarlierMessages: (chatId: string, callback: Function) => void;
   const areAllMessagesLoaded: (chatId: string) => boolean;
   const getAllMessagesInChat: (chatId: string) => Message[];
+  const getGroupMetadata: (groupId: string) => object;
+  const getProfilePicFromId: (id: string, callback: Function) => void;
 }
 
 export class Whatsapp {
@@ -138,6 +140,31 @@ export class Whatsapp {
       return this.getContact(memberId._serialized);
     });
     return await Promise.all(actions);
+  }
+
+  /**
+   * Retrieves contact detail object of given contact id
+   * @param groupId
+   */
+  public async getGroupMetadata(groupId: string) {
+    return await this.page.evaluate(
+      groupId => WAPI.getGroupMetadata(groupId),
+      groupId
+    );
+  }
+
+  /**
+   * Get earlier messages in a chat by a given chat id
+   * @param id chat id
+   */
+  public async getProfilePicFromId(id: string) {
+    return await this.page.evaluateHandle(id => {
+      return new Promise(resolve => {
+        WAPI.getProfilePicFromId(id, (img) => {
+          resolve(img);
+        });
+      });
+    }, id);
   }
 
   /**
